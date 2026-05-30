@@ -57,6 +57,7 @@ dev = [
   "matplotlib",
   "seaborn",
   "missingno",
+  "plotly",
   "ipykernel>=7.2.0",
 ]
 

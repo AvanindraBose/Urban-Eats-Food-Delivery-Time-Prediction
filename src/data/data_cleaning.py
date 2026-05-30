@@ -122,18 +122,18 @@ def data_cleaning(df: pd.DataFrame) -> pd.DataFrame:
     df['order_date'] = pd.to_datetime(df['order_date'],dayfirst=True)
     date_df = extract_datetime_features(df['order_date'])
     df = df.assign (
-            day = date_df['day'],
-            month = date_df['month'],
-            day_of_week = date_df['day_of_week'],
-            is_weekend = date_df['is_weekend']
+            order_day = date_df['day'],
+            order_month = date_df['month'],
+            order_day_of_week = date_df['day_of_week'],
+            is_weekend = date_df['is_weekend'].astype(object)
         )
     
     # Cleaning order_time and order_picked time and extracting only useful info
     df['order_time'] = pd.to_datetime(df['order_time'],format='mixed')
     df['order_picked_time'] = pd.to_datetime(df['order_picked_time'],format = 'mixed')
-    df['order_time_hr'] = df['order_time'].dt.hour
-    df['pickup_time'] = (df['order_picked_time'] - df['order_time']).dt.seconds/60
-    df['order_time_of_day'] = time_of_day(df['order_time_hr'])
+    df['order_time_hour'] = df['order_time'].dt.hour
+    df['pickup_time_minutes'] = (df['order_picked_time'] - df['order_time']).dt.seconds/60
+    df['order_time_of_day'] = time_of_day(df['order_time_hour'])
     df = df.drop(columns=['order_time','order_picked_time'])
 
     #  Cleaning Categorical Columns
@@ -155,76 +155,10 @@ def data_cleaning(df: pd.DataFrame) -> pd.DataFrame:
     # city_type
     df['city_type'] = df['city_type'].str.rstrip().str.lower()
 
-    # multiple deliveries column -> Numerical Column
-    df['multiple_deliveries'] = df['multiple_deliveries'].astype(float)
-
     # Target Column -> Time Taken
     df['time_taken'] = df['time_taken'].str.replace("(min) ","").astype(int)
 
     return df
-
-    # return (
-    #     df
-    #     .drop(columns="id")
-    #     .drop(index=minors_idx)
-    #     .drop(index = six_star_idx)
-    #     .replace("Nan ",np.nan)
-    #      .assign(
-    #         # city column out of rider id
-    #         city_name = lambda x: x['rider_id'].str.split("RES").str.get(0),
-    #         # convert age to float
-    #         age = lambda x: x['age'].astype(float),
-    #         # convert ratings to float
-    #         ratings = lambda x: x['ratings'].astype(float),
-    #         # absolute values for location based columns
-    #         restaurant_latitude = lambda x: x['restaurant_latitude'].abs(),
-    #         restaurant_longitude = lambda x: x['restaurant_longitude'].abs(),
-    #         delivery_latitude = lambda x: x['delivery_latitude'].abs(),
-    #         delivery_longitude = lambda x: x['delivery_longitude'].abs(),
-    #         # order date to datetime and feature extraction
-    #         order_date = lambda x: pd.to_datetime(x['order_date'],
-    #                                               dayfirst=True),
-    #         order_day = lambda x: x['order_date'].dt.day,
-    #         order_month = lambda x: x['order_date'].dt.month,
-    #         order_day_of_week = lambda x: x['order_date'].dt.day_name().str.lower(),
-    #         is_weekend = lambda x: (x['order_date']
-    #                                 .dt.day_name()
-    #                                 .isin(["Saturday","Sunday"])
-    #                                 .astype(int)),
-    #         # time based columns
-    #         order_time = lambda x: pd.to_datetime(x['order_time'],
-    #                                               format='mixed'),
-    #         order_picked_time = lambda x: pd.to_datetime(x['order_picked_time'],
-    #                                                      format='mixed'),
-    #         # time taken to pick order
-    #         pickup_time_minutes = lambda x: (
-    #                                         (x['order_picked_time'] - x['order_time'])
-    #                                         .dt.seconds / 60
-    #                                         ),
-    #         # hour in which order was placed
-    #         order_time_hour = lambda x: x['order_time'].dt.hour,
-    #         # time of the day when order was placed
-    #         order_time_of_day = lambda x: (
-    #                             x['order_time_hour'].pipe(time_of_day)),
-    #         # categorical columns
-    #         weather = lambda x: (
-    #                             x['weather']
-    #                             .str.replace("conditions ","")
-    #                             .str.lower()
-    #                             .replace("nan",np.nan)),
-    #         traffic = lambda x: x["traffic"].str.rstrip().str.lower(),
-    #         type_of_order = lambda x: x['type_of_order'].str.rstrip().str.lower(),
-    #         type_of_vehicle = lambda x: x['type_of_vehicle'].str.rstrip().str.lower(),
-    #         festival = lambda x: x['festival'].str.rstrip().str.lower(),
-    #         city_type = lambda x: x['city_type'].str.rstrip().str.lower(),
-    #         # multiple deliveries column
-    #         multiple_deliveries = lambda x: x['multiple_deliveries'].astype(float),
-    #         # target column modifications
-    #         time_taken = lambda x: (x['time_taken']
-    #                                 .str.replace("(min) ","")
-    #                                 .astype(int)))
-    #     .drop(columns=["order_time","order_picked_time"])
-    # )
 
 
 def perform_data_cleaning(df: pd.DataFrame , saved_file_path: str) -> None:
@@ -234,11 +168,11 @@ def perform_data_cleaning(df: pd.DataFrame , saved_file_path: str) -> None:
         .pipe(data_cleaning)
         .pipe(clean_lat_long)
         .pipe(calculate_haversine_distance)
-        .pipe(create_distance_type)
+        # .pipe(create_distance_type)
     )
 
 
-    cleaned_df.to_csv(saved_file_path)
+    cleaned_df.to_csv(saved_file_path,index = False)
 
 if __name__ == "__main__":
     root_dir = Path(__file__).parent.parent.parent

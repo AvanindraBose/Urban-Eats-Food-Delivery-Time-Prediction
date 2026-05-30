@@ -58,6 +58,7 @@ dev = [
   "seaborn",
   "missingno",
   "plotly",
+  "nbformat>=4.2.0",
   "ipykernel>=7.2.0",
 ]
 

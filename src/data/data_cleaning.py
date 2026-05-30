@@ -237,6 +237,7 @@ def perform_data_cleaning(df: pd.DataFrame , saved_file_path: str) -> None:
         .pipe(create_distance_type)
     )
 
+
     cleaned_df.to_csv(saved_file_path)
 
 if __name__ == "__main__":

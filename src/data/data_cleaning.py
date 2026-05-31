@@ -168,9 +168,8 @@ def perform_data_cleaning(df: pd.DataFrame , saved_file_path: str) -> None:
         .pipe(data_cleaning)
         .pipe(clean_lat_long)
         .pipe(calculate_haversine_distance)
-        # .pipe(create_distance_type)
+        .pipe(create_distance_type)
     )
-
 
     cleaned_df.to_csv(saved_file_path,index = False)
 

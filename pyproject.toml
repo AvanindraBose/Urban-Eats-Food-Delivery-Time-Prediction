@@ -23,8 +23,9 @@ dependencies = [
   "asyncpg",
   # Cache
   "redis",
-  # MLflow (for remote model loading via DagsHub)
+  # MLflow & Dagshub (for remote model loading via DagsHub)
   "mlflow>=3.0",
+  "dagshub",
   # Inference requirements (REQUIRED for .joblib models)
   "scikit-learn>=1.3",
   "pandas>=2.0",
@@ -48,7 +49,6 @@ ml = [
 
 pipeline = [
   "dvc>=3.0",
-  "dagshub",
   "dvc[s3]",
   "awscli",
 ]

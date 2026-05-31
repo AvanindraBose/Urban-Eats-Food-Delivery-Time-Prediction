@@ -5438,6 +5438,7 @@ source = { editable = "." }
 dependencies = [
     { name = "asyncpg" },
     { name = "bcrypt" },
+    { name = "dagshub" },
     { name = "fastapi" },
     { name = "joblib" },
     { name = "mlflow" },
@@ -5472,7 +5473,6 @@ ml = [
 ]
 pipeline = [
     { name = "awscli" },
-    { name = "dagshub" },
     { name = "dvc", extra = ["s3"] },
 ]
 test = [
@@ -5491,7 +5491,7 @@ requires-dist = [
     { name = "awscli", marker = "extra == 'pipeline'" },
     { name = "bcrypt" },
     { name = "coverage", marker = "extra == 'test'" },
-    { name = "dagshub", marker = "extra == 'pipeline'" },
+    { name = "dagshub" },
     { name = "dvc", marker = "extra == 'pipeline'", specifier = ">=3.0" },
     { name = "dvc", extras = ["s3"], marker = "extra == 'pipeline'" },
     { name = "fastapi" },

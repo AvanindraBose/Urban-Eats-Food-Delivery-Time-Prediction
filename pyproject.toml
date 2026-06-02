@@ -42,9 +42,7 @@ dependencies = [
 
 ml = [
   "xgboost",
-  "hyperopt",
-  "nltk",
-  "spacy",
+  "optuna",
 ]
 
 pipeline = [

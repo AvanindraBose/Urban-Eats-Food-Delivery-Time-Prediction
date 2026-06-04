@@ -1,0 +1,40 @@
+{
+  "missing_value_strategy": "dropna",
+  "numerical_features": [
+    "age",
+    "ratings",
+    "is_weekend",
+    "pickup_time_minutes",
+    "distance"
+  ],
+  "nominal_categorical_features": [
+    "weather",
+    "type_of_order",
+    "type_of_vehicle",
+    "festival",
+    "city_type",
+    "order_time_of_day"
+  ],
+  "ordinal_categorical_features": [
+    "traffic",
+    "distance_type"
+  ],
+  "ordinal_categories": {
+    "traffic": [
+      "low",
+      "medium",
+      "high",
+      "jam"
+    ],
+    "distance_type": [
+      "short",
+      "medium",
+      "long",
+      "very_long"
+    ]
+  },
+  "numerical_scaler": "MinMaxScaler",
+  "nominal_encoder": "OneHotEncoder(drop='first', handle_unknown='ignore')",
+  "ordinal_encoder": "OrdinalEncoder",
+  "target_transformer": "PowerTransformer"
+}

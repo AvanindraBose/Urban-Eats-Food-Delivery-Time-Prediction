@@ -1,0 +1,7 @@
+stages:
+  data-cleaning:
+    cmd: python -m src.data.data_cleaning
+    deps:
+    - data/raw/urbaneats-dataset.csv
+    outs:
+    - data/interim/urbaneats-cleaned-dataset.csv

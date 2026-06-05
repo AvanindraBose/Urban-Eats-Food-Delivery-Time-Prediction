@@ -1,6 +1,44 @@
 import pandas as pd
 import numpy as np
+import logging
 from pathlib import Path
+from datetime import datetime, timezone
+from src.utils.logger import CustomLogger, create_log_path
+
+# logging configuration
+logger = logging.getLogger('data_transformation')
+logger.setLevel('DEBUG')
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel('DEBUG')
+
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(formatter)
+
+logger.addHandler(console_handler)
+
+# File Hnadler Configuration
+log_file_path = create_log_path("Data-Cleaning-Logs")
+cleaning_logger = CustomLogger(
+    logger_name="Data Cleaning",
+    log_filename=log_file_path
+)
+
+cleaning_logger.set_log_level(level=logging.INFO)
+
+cleaning_logger.save_logs(f"Data Cleaning Pipeline Started at {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')}", log_level='info')
+
+
+def load_data(data_path:Path) -> pd.DataFrame:
+    try:
+        data = pd.read_csv(data_path)
+    except Exception as e:
+        cleaning_logger.save_logs(f"error encountered {str(e)} during loading data.",log_level='error')
+        raise
+    else :
+        cleaning_logger.save_logs(f"Data Fetched successfully from path: {data_path}")
+        return data
 
 def change_column_names(data: pd.DataFrame) -> pd.DataFrame:
     return (
@@ -30,6 +68,20 @@ def clean_lat_long(data: pd.DataFrame, threshold: float=1.0) -> pd.DataFrame:
     
     return data
     
+def columns_to_drop(data: pd.DataFrame) -> pd.DataFrame:
+    columns_drop =  ['rider_id',
+                    'restaurant_latitude',
+                    'restaurant_longitude',
+                    'delivery_latitude',
+                    'delivery_longitude',
+                    'order_date',
+                    "order_time_hour",
+                    "order_day",
+                    "city_name",
+                    "order_day_of_week",
+                    "order_month"]
+    data = data.drop(columns=columns_drop)
+    return data
 
 def extract_datetime_features(ser: pd.Series) -> pd.DataFrame:
     date_col = pd.to_datetime(ser,dayfirst=True)
@@ -125,7 +177,7 @@ def data_cleaning(df: pd.DataFrame) -> pd.DataFrame:
             order_day = date_df['day'],
             order_month = date_df['month'],
             order_day_of_week = date_df['day_of_week'],
-            is_weekend = date_df['is_weekend'].astype(object)
+            is_weekend = date_df['is_weekend']
         )
     
     # Cleaning order_time and order_picked time and extracting only useful info
@@ -169,6 +221,7 @@ def perform_data_cleaning(df: pd.DataFrame , saved_file_path: str) -> None:
         .pipe(clean_lat_long)
         .pipe(calculate_haversine_distance)
         .pipe(create_distance_type)
+        .pipe(columns_to_drop)
     )
 
     cleaned_df.to_csv(saved_file_path,index = False)
@@ -180,6 +233,6 @@ if __name__ == "__main__":
     cleaned_path.mkdir(exist_ok=True,parents=True)
     cleaned_file_name = "urbaneats-cleaned-dataset.csv"
 
-    df  = pd.read_csv(data_dir)
+    df  = load_data(data_dir)
     
     perform_data_cleaning(df , cleaned_path / cleaned_file_name)

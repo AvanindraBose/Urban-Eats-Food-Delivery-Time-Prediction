@@ -80,8 +80,8 @@ data/raw/*
 !data/raw/.gitignore
 !data/raw/.gitkeep
 !data/raw/*.dvc
-data/interim/*
-data/processed/*
+# data/interim/*
+# data/processed/*
 
 # Mac OS-specific storage files
 .DS_Store

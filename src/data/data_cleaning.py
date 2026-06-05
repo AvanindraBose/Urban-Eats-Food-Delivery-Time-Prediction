@@ -302,7 +302,7 @@ def main() -> None:
 
         root_dir = Path(__file__).parent.parent.parent
         data_dir = root_dir / "data" / "raw" / "urbaneats-dataset.csv"
-        cleaned_path = root_dir / "data" / "interim"
+        cleaned_path = root_dir / "data" / "cleaned"
         cleaned_file_name = "urbaneats-cleaned-dataset.csv"
 
         df = load_data(data_dir)

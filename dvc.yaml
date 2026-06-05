@@ -4,4 +4,4 @@ stages:
     deps:
     - data/raw/urbaneats-dataset.csv
     outs:
-    - data/interim/urbaneats-cleaned-dataset.csv
+    - data/cleaned/urbaneats-cleaned-dataset.csv

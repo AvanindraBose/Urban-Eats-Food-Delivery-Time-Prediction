@@ -8,7 +8,7 @@ stages:
       md5: 55bd6cc42f2360b5de9569cf9cbd8342
       size: 7726618
     outs:
-    - path: data/interim/urbaneats-cleaned-dataset.csv
+    - path: data/cleaned/urbaneats-cleaned-dataset.csv
       hash: md5
       md5: 9160c106062688205cd7dc1347d8267d
       size: 4419509

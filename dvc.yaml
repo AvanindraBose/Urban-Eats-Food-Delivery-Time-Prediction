@@ -5,3 +5,14 @@ stages:
     - data/raw/urbaneats-dataset.csv
     outs:
     - data/cleaned/urbaneats-cleaned-dataset.csv
+  data-preparation:
+    cmd: python -m src.data.data_preparation
+    deps:
+    - data/cleaned/urbaneats-cleaned-dataset.csv
+    - src/data/data_preparation.py
+    params:
+    - Data_Preparation.random_state
+    - Data_Preparation.test_size
+    outs:
+    - data/interim/train.csv
+    - data/interim/test.csv

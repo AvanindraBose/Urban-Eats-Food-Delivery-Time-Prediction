@@ -1,1 +1,4 @@
 /preprocessor.joblib
+/model.joblib
+/stacking_regressor.joblib
+/power_transformer.joblib

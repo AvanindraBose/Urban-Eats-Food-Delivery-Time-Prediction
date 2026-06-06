@@ -1,3 +1,33 @@
 Data_Preparation:
-  test_size: 0.2 
   random_state: 42
+  test_size: 0.2
+
+Train:
+
+  RFRegressor:
+    max_depth: 15
+    max_features: null
+    max_samples: 0.8689643457612419
+    min_samples_leaf: 1
+    min_samples_split: 10
+    n_estimators: 190
+    n_jobs: -1
+    random_state: 42
+
+  XGBRegressor:
+    colsample_bylevel: 0.8881626404741021
+    colsample_bynode: 0.7870334195129309
+    colsample_bytree: 0.9651511117267577
+    gamma: 0.452621135308464
+    grow_policy: lossguide
+    learning_rate: 0.03417913351080966
+    max_delta_step: 1
+    max_depth: 11
+    min_child_weight: 4
+    n_estimators: 603
+    n_jobs: -1
+    random_state: 42
+    reg_alpha: 8.213030683468667e-08
+    reg_lambda: 0.2436995143218315
+    subsample: 0.863443370509037
+    tree_method: hist

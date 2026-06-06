@@ -64,3 +64,55 @@ stages:
       hash: md5
       md5: a36db4af46f2c01f36b1727c5c50cff2
       size: 7243
+  training-model:
+    cmd: python -m src.models.train_model
+    deps:
+    - path: data/processed/train_trans.csv
+      hash: md5
+      md5: 0d2f47751596e1c0f6bffbf7bb582a07
+      size: 4329420
+    - path: src/models/train_model.py
+      hash: md5
+      md5: a99a841de5a749a3fef62a660df122a2
+      size: 7421
+    params:
+      params.yaml:
+        Train.RFRegressor:
+          max_depth: 15
+          max_features:
+          max_samples: 0.8689643457612419
+          min_samples_leaf: 1
+          min_samples_split: 10
+          n_estimators: 190
+          n_jobs: -1
+          random_state: 42
+        Train.XGBRegressor:
+          colsample_bylevel: 0.8881626404741021
+          colsample_bynode: 0.7870334195129309
+          colsample_bytree: 0.9651511117267577
+          gamma: 0.452621135308464
+          grow_policy: lossguide
+          learning_rate: 0.03417913351080966
+          max_delta_step: 1
+          max_depth: 11
+          min_child_weight: 4
+          n_estimators: 603
+          n_jobs: -1
+          random_state: 42
+          reg_alpha: 8.213030683468667e-08
+          reg_lambda: 0.2436995143218315
+          subsample: 0.863443370509037
+          tree_method: hist
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: b805b75c05b04269db250a6e6d0f9917
+      size: 64391192
+    - path: models/power_transformer.joblib
+      hash: md5
+      md5: 10cd568333241a57a6c5a0beb08de0bf
+      size: 805
+    - path: models/stacking_regressor.joblib
+      hash: md5
+      md5: 09c02a95529b1ef1507ab71b45c6793a
+      size: 64381210

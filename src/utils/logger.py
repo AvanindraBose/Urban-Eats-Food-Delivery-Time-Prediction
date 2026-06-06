@@ -14,7 +14,7 @@ def create_log_path(module_name: str) -> str:
     """
     current_date = dt.date.today()
     # create a logs folder in the root directory
-    root_path = Path(__file__).parent.parent
+    root_path = Path(__file__).parent.parent.parent
     # create path for logs folder
     log_dir_path = root_path / 'logs'
     log_dir_path.mkdir(exist_ok=True)

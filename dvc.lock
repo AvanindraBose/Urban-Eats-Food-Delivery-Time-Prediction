@@ -103,7 +103,7 @@ stages:
           n_estimators: 603
           n_jobs: -1
           random_state: 42
-          reg_alpha: 8.213030683468666e-08
+          reg_alpha: 8.213030683468665e-08
           reg_lambda: 0.2436995143218315
           subsample: 0.863443370509037
           tree_method: hist
@@ -144,3 +144,86 @@ stages:
       hash: md5
       md5: e09c23690337ad08934e43d7d0fcf930
       size: 225
+  model-training:
+    cmd: python -m src.models.train_model
+    deps:
+    - path: data/processed/train_trans.csv
+      hash: md5
+      md5: 8a47506e69037b6a7bf74ef4011360f5
+      size: 4334455
+    - path: src/models/train_model.py
+      hash: md5
+      md5: a99a841de5a749a3fef62a660df122a2
+      size: 7421
+    params:
+      params.yaml:
+        Train.RFRegressor:
+          max_depth: 15
+          max_features:
+          max_samples: 0.8689643457612419
+          min_samples_leaf: 1
+          min_samples_split: 10
+          n_estimators: 190
+          n_jobs: -1
+          random_state: 42
+        Train.XGBRegressor:
+          colsample_bylevel: 0.8881626404741021
+          colsample_bynode: 0.7870334195129309
+          colsample_bytree: 0.9651511117267577
+          gamma: 0.452621135308464
+          grow_policy: lossguide
+          learning_rate: 0.03417913351080966
+          max_delta_step: 1
+          max_depth: 11
+          min_child_weight: 4
+          n_estimators: 603
+          n_jobs: -1
+          random_state: 42
+          reg_alpha: 8.213030683468665e-08
+          reg_lambda: 0.2436995143218315
+          subsample: 0.863443370509037
+          tree_method: hist
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: 163e18e00b1a028d379bc35524b92afe
+      size: 64018104
+    - path: models/power_transformer.joblib
+      hash: md5
+      md5: 789ad090a397d820c37cef20b6374429
+      size: 805
+    - path: models/stacking_regressor.joblib
+      hash: md5
+      md5: ccfa7999c0f348f1026ebb61b7b908d7
+      size: 64008122
+  model-evaluation:
+    cmd: python -m src.models.evaluate_model
+    deps:
+    - path: data/processed/test_trans.csv
+      hash: md5
+      md5: 33148eaf07078225d31741201497bd8e
+      size: 1084274
+    - path: data/processed/train_trans.csv
+      hash: md5
+      md5: 8a47506e69037b6a7bf74ef4011360f5
+      size: 4334455
+    - path: models/model.joblib
+      hash: md5
+      md5: 163e18e00b1a028d379bc35524b92afe
+      size: 64018104
+    - path: models/preprocessor.joblib
+      hash: md5
+      md5: 8df6e013e9c3b081b5272238dd096e4e
+      size: 7171
+    outs:
+    - path: reports/run_information.json
+      hash: md5
+      md5: 3d3c515a5c957b1051246dbf9ad23ce0
+      size: 307
+  model-registration:
+    cmd: python -m src.models.register_model
+    deps:
+    - path: reports/run_information.json
+      hash: md5
+      md5: 3d3c515a5c957b1051246dbf9ad23ce0
+      size: 307

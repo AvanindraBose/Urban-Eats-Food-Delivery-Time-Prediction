@@ -27,7 +27,7 @@ stages:
     - data/processed/test_trans.csv
     - data/processed/train_trans.csv
     - models/preprocessor.joblib
-  training-model:
+  model-training:
     cmd: python -m src.models.train_model
     deps:
     - data/processed/train_trans.csv
@@ -39,7 +39,7 @@ stages:
     - models/model.joblib
     - models/stacking_regressor.joblib
     - models/power_transformer.joblib
-  evaluation:
+  model-evaluation:
     cmd: python -m src.models.evaluate_model
     deps:
     - data/processed/train_trans.csv
@@ -47,4 +47,8 @@ stages:
     - models/model.joblib
     - models/preprocessor.joblib
     outs:
+    - reports/run_information.json
+  model-registration:
+    cmd: python -m src.models.register_model
+    deps:
     - reports/run_information.json

@@ -34,7 +34,7 @@ TARGET = "time_taken"
 
 log_file_path = create_log_path("Model-Evaluation-Logs")
 evaluation_logger = CustomLogger(
-    logger_name="Model Training",
+    logger_name="Model Evaluation",
     log_filename=log_file_path,
 )
 
@@ -81,13 +81,15 @@ def load_model(model_path: Path):
         evaluation_logger.save_logs("Model Loaded Successfully",log_level="info")
         return model
 
-def save_model_info(save_json_path,run_id, artifact_path, model_name) -> None:
+def save_model_info(save_json_path,run_id, artifact_path, model_name,model_id,exp_id) -> None:
     try:
         evaluation_logger.save_logs("Started Saving the Run info",log_level="info")
         info_dict = {
             "run_id": run_id,
             "artifact_path": artifact_path,
-            "model_name": model_name
+            "model_name": model_name,
+            "model_id": model_id,
+            "experiment_id": exp_id
         }
         with open(save_json_path,"w") as f:
             json.dump(info_dict,f,indent=4)
@@ -190,7 +192,7 @@ def main():
                     ("model",model)
                 ]
             )
-            mlflow.sklearn.log_model(model_pipe,"delivery_time_pred_model_pipe",signature=model_signature)
+            model_info = mlflow.sklearn.log_model(model_pipe,"delivery_time_pred_model_pipe",signature=model_signature)
 
             # log stacking regressor
             mlflow.log_artifact(root_path / "models" / "stacking_regressor.joblib")
@@ -208,13 +210,17 @@ def main():
         # get the run id 
         run_id = run.info.run_id
         model_name = "delivery_time_pred_model_pipe"
+        exp_id = run.info.experiment_id
+        model_id = model_info.model_id
         
         # save the model info
         save_json_path = root_path / "reports" / "run_information.json"
         save_model_info(save_json_path=save_json_path,
                         run_id=run_id,
                         artifact_path=artifact_uri,
-                        model_name=model_name)
+                        model_name=model_name,
+                        model_id=model_id,
+                        exp_id=exp_id)
         evaluation_logger.save_logs("Model Training Pipeline completed successfully.", log_level="info")
     except Exception as e :
         evaluation_logger.save_logs(f"Feature Preprocessing Pipeline Failed: {e}", log_level="exception")

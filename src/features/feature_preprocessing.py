@@ -15,6 +15,7 @@ set_config(transform_output='pandas')
 num_cols = ["age",
             "ratings",
             "pickup_time_minutes",
+            "is_weekend",
             "distance"]
 
 nominal_cat_cols = ['weather',
@@ -22,7 +23,6 @@ nominal_cat_cols = ['weather',
                     'type_of_vehicle',
                     "festival",
                     "city_type",
-                    "is_weekend",
                     "order_time_of_day"]
 
 ordinal_cat_cols = ["traffic","distance_type"]
@@ -148,10 +148,8 @@ def main():
                                                 handle_unknown="ignore",
                                                 sparse_output=False), nominal_cat_cols),
                 ("ordinal_encode", OrdinalEncoder(categories=[traffic_order,
-                                                              distance_type_order],
-                                                encoded_missing_value=-999,
-                                                handle_unknown="use_encoded_value",
-                                                unknown_value=-1), ordinal_cat_cols)],
+                                                              distance_type_order]),
+                                                ordinal_cat_cols)],
                                         remainder="passthrough",
                                         n_jobs=-1,
                                         force_int_remainder_cols=False,

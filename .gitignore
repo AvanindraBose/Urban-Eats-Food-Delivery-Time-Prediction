@@ -92,3 +92,4 @@ data/raw/*
 
 # Mypy cache
 .mypy_cache/
+/run_information.json

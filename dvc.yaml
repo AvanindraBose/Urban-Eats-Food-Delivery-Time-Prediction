@@ -3,6 +3,7 @@ stages:
     cmd: python -m src.data.data_cleaning
     deps:
     - data/raw/urbaneats-dataset.csv
+    - src/data/data_cleaning.py
     outs:
     - data/cleaned/urbaneats-cleaned-dataset.csv
   data-preparation:

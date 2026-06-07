@@ -7,6 +7,10 @@ stages:
       hash: md5
       md5: 55bd6cc42f2360b5de9569cf9cbd8342
       size: 7726618
+    - path: src/data/data_cleaning.py
+      hash: md5
+      md5: d3b74f0dc55b43a47b3feac6088183d8
+      size: 12920
     outs:
     - path: data/cleaned/urbaneats-cleaned-dataset.csv
       hash: md5
@@ -21,8 +25,8 @@ stages:
       size: 4419509
     - path: src/data/data_preparation.py
       hash: md5
-      md5: ca52dad99547e60468507d3993aa52c6
-      size: 6704
+      md5: 98e60e37a2dacade74d1938ae69c691e
+      size: 7580
     params:
       params.yaml:
         Data_Preparation.random_state: 42
@@ -30,47 +34,47 @@ stages:
     outs:
     - path: data/interim/test.csv
       hash: md5
-      md5: 20172ab330931a534fcb3fb75bf1b77a
-      size: 901132
+      md5: f052b1e6bf1657c3a6d7221e464db7b2
+      size: 769585
     - path: data/interim/train.csv
       hash: md5
-      md5: 08e8f74451482dfdf2f472e94acb5993
-      size: 3604437
+      md5: a817b62d6d6fc672abb5187a6e3befa0
+      size: 3079514
   feature-preprocessing:
     cmd: python -m src.features.feature_preprocessing
     deps:
     - path: data/interim/test.csv
       hash: md5
-      md5: 20172ab330931a534fcb3fb75bf1b77a
-      size: 901132
+      md5: f052b1e6bf1657c3a6d7221e464db7b2
+      size: 769585
     - path: data/interim/train.csv
       hash: md5
-      md5: 08e8f74451482dfdf2f472e94acb5993
-      size: 3604437
+      md5: a817b62d6d6fc672abb5187a6e3befa0
+      size: 3079514
     - path: src/features/feature_preprocessing.py
       hash: md5
-      md5: 2409485be375878083ceddb5d70ff2f4
-      size: 7947
+      md5: 45c07b90e1d8e596e80a9d0b3409b684
+      size: 8049
     outs:
     - path: data/processed/test_trans.csv
       hash: md5
-      md5: 5890b119640eb07bd1b6d3abff5c509e
-      size: 1089311
+      md5: 33148eaf07078225d31741201497bd8e
+      size: 1084274
     - path: data/processed/train_trans.csv
       hash: md5
-      md5: febb87a261494b0d2b2c580283ddb808
-      size: 4329418
+      md5: 8a47506e69037b6a7bf74ef4011360f5
+      size: 4334455
     - path: models/preprocessor.joblib
       hash: md5
-      md5: 796c5013902ad82b168f6834157ac471
+      md5: 8df6e013e9c3b081b5272238dd096e4e
       size: 7171
   training-model:
     cmd: python -m src.models.train_model
     deps:
     - path: data/processed/train_trans.csv
       hash: md5
-      md5: febb87a261494b0d2b2c580283ddb808
-      size: 4329418
+      md5: 8a47506e69037b6a7bf74ef4011360f5
+      size: 4334455
     - path: src/models/train_model.py
       hash: md5
       md5: a99a841de5a749a3fef62a660df122a2
@@ -106,37 +110,37 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: abaea705690ecae7ea1dfd356dade4d2
-      size: 64405688
+      md5: 163e18e00b1a028d379bc35524b92afe
+      size: 64018104
     - path: models/power_transformer.joblib
       hash: md5
-      md5: 10cd568333241a57a6c5a0beb08de0bf
+      md5: 789ad090a397d820c37cef20b6374429
       size: 805
     - path: models/stacking_regressor.joblib
       hash: md5
-      md5: 1405a091abc57eef8b66fa2d8a49b968
-      size: 64395706
+      md5: ccfa7999c0f348f1026ebb61b7b908d7
+      size: 64008122
   evaluation:
     cmd: python -m src.models.evaluate_model
     deps:
     - path: data/processed/test_trans.csv
       hash: md5
-      md5: 5890b119640eb07bd1b6d3abff5c509e
-      size: 1089311
+      md5: 33148eaf07078225d31741201497bd8e
+      size: 1084274
     - path: data/processed/train_trans.csv
       hash: md5
-      md5: febb87a261494b0d2b2c580283ddb808
-      size: 4329418
+      md5: 8a47506e69037b6a7bf74ef4011360f5
+      size: 4334455
     - path: models/model.joblib
       hash: md5
-      md5: abaea705690ecae7ea1dfd356dade4d2
-      size: 64405688
+      md5: 163e18e00b1a028d379bc35524b92afe
+      size: 64018104
     - path: models/preprocessor.joblib
       hash: md5
-      md5: 796c5013902ad82b168f6834157ac471
+      md5: 8df6e013e9c3b081b5272238dd096e4e
       size: 7171
     outs:
     - path: reports/run_information.json
       hash: md5
-      md5: 678ddbcb433e245ad9ee1e625ac115c0
+      md5: e09c23690337ad08934e43d7d0fcf930
       size: 225

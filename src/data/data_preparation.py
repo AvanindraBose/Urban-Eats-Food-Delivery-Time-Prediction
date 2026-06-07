@@ -37,7 +37,27 @@ def load_data(data_path: Path) -> pd.DataFrame:
         return data
 
 
-def validate_data(data: pd.DataFrame) -> pd.DataFrame:
+def drop_missing_values(data: pd.DataFrame) -> pd.DataFrame:
+    try:
+        preparation_logger.save_logs(
+            f"Original dataset shape: {data.shape}. Checking for missing values.", 
+            log_level="info"
+        )
+        df_dropped = data.dropna()
+        preparation_logger.save_logs(
+            f"Dataset shape after dropping NaNs: {df_dropped.shape}", 
+            log_level="info"
+        )
+        
+        if df_dropped.isna().sum().sum() > 0:
+            raise ValueError("The dataframe still contains missing values after dropna().")
+    except Exception as exc:
+        preparation_logger.save_logs(f"Error during missing value removal: {exc}", log_level="exception")
+        raise
+    else:
+        return df_dropped
+
+def validate_and_drop_missing_data(data: pd.DataFrame) -> pd.DataFrame:
     try:
         preparation_logger.save_logs("Validating data before train-test split.", log_level="info")
         if data.empty:
@@ -47,12 +67,16 @@ def validate_data(data: pd.DataFrame) -> pd.DataFrame:
             raise ValueError(f"Required target column '{TARGET}' is missing.")
 
         validated_data = data.copy()
+
+        # Removing Blank Values
+        df_dropped = drop_missing_values(validated_data)
+        
     except Exception as exc:
         preparation_logger.save_logs(f"Data validation failed: {exc}", log_level="exception")
         raise
     else:
         preparation_logger.save_logs("Data validation completed successfully.", log_level="info")
-        return validated_data
+        return df_dropped
 
 
 def split_data(data: pd.DataFrame, test_size: float, random_state: int) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -131,7 +155,7 @@ def perform_data_preparation(
 ) -> None:
     try:
         preparation_logger.save_logs("Running full data preparation pipeline.", log_level="info")
-        validated_data = validate_data(data)
+        validated_data = validate_and_drop_missing_data(data)
         train_data, test_data = split_data(
             validated_data,
             test_size=test_size,

@@ -49,6 +49,10 @@ def load_data(data_path: Path) -> pd.DataFrame:
         preprocessing_logger.save_logs(f"Failed to load data from {data_path}: {exc}", log_level="exception")
         raise
     else:
+        preprocessing_logger.save_logs(
+            f"Data loaded successfully. Shape: {df.shape}",
+            log_level="info",
+        )
         return df
 
 
@@ -156,8 +160,8 @@ def main():
                                         verbose_feature_names_out=False)
         
         # load and clean missing values
-        train_df = drop_missing_values(load_data(data_path=train_data_path))
-        test_df = drop_missing_values(load_data(data_path=test_data_path))
+        train_df = load_data(data_path=train_data_path)
+        test_df = load_data(data_path=test_data_path)
         
         # split X and y
         X_train, y_train = make_X_and_y(data=train_df, target_column=target_col)

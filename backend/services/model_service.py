@@ -72,8 +72,11 @@ async def predict_time(data: pd.DataFrame) -> dict:
             f"Prediction completed successfully | Output={prediction[0]}",
             "info"
         )
-
-        result = {"prediction": prediction[0]}
+        lower_limit = round(int(prediction[0]),2) - 2.98
+        upper_limit = round(int(prediction[0]),2) + 2.98
+        result = {"prediction": round(int(prediction[0])),
+                  "lower_limit": lower_limit,
+                  "upper_limit": upper_limit}
 
         return result
 

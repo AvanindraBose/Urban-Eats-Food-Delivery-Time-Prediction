@@ -1,14 +1,20 @@
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Header, Request
 from fastapi.responses import JSONResponse
 from backend.core.config import settings
 from backend.core.security import generate_access_token
 from backend.logging_fastapi.logger_api import auth_logger
 from typing import Optional
+from backend.core.rate_limiter import limiter
+
 
 router = APIRouter(tags=["Auth"])
 
 @router.post("/auth/token")
-async def provide_token(api_key: Optional[str] = Header(None,alias="X-API-Key")):
+@limiter.limit("5/minute")
+async def provide_token(
+    request: Request,
+    api_key: Optional[str] = Header(None,alias="X-API-Key")
+    ):
     try:
         if not api_key:
             auth_logger.save_logs("Missing API Key", log_level="warning")
@@ -52,7 +58,7 @@ async def provide_token(api_key: Optional[str] = Header(None,alias="X-API-Key"))
             content={
                 "access_token": token,
                 "token_type": "bearer",
-                "expires_in": int(settings.JWT_EXPIRY_MINUTES) * 60 # Minutes
+                "expires_in": int(settings.JWT_EXPIRY_MINUTES) * 60 # Seconds
             }
         )
 

@@ -116,6 +116,8 @@ def main():
         model_path = root_path / "models" / "model.joblib"
         # preprocessor Path
         preprocessor_path = root_path / "models" / "preprocessor.joblib"
+        # signature data path
+        signature_path = root_path / "data" / "interim" / "train.csv"
 
         # load preprocessor
         preprocessor = load_preprocessor(preprocessor_path)
@@ -124,10 +126,13 @@ def main():
         train_data = load_data(train_data_path)
         # load the test data
         test_data = load_data(test_data_path)
+        # load the signature data
+        signature_data = load_data(signature_path)
         
         # split the train and test data
         X_train, y_train = make_X_and_y(train_data,TARGET)
         X_test, y_test = make_X_and_y(test_data,TARGET)
+        X_train_sign,_ = make_X_and_y(signature_data,TARGET)
         
         # load the model
         model = load_model(model_path)
@@ -180,11 +185,7 @@ def main():
             # log input
             mlflow.log_input(dataset=train_data_input,context="training")
             mlflow.log_input(dataset=test_data_input,context="validation")
-            
-            # model signature
-            model_signature = mlflow.models.infer_signature(model_input=X_train.sample(20,random_state=42),
-                                        model_output=model.predict(X_train.sample(20,random_state=42)))
-            
+
             # log the final model + preprocessor
             model_pipe = Pipeline(
                 steps=[
@@ -192,6 +193,11 @@ def main():
                     ("model",model)
                 ]
             )
+            
+            # model signature
+            model_signature = mlflow.models.infer_signature(model_input=X_train_sign.sample(20,random_state=42),
+                                        model_output=model_pipe.predict(X_train_sign.sample(20,random_state=42)))
+            
             model_info = mlflow.sklearn.log_model(model_pipe,"delivery_time_pred_model_pipe",signature=model_signature)
 
             # log stacking regressor

@@ -11,18 +11,13 @@ dependencies = [
   "typer",
   # Backend (API)
   "fastapi",
+  "slowapi",
   "uvicorn",
   "pydantic",
-  "pydantic[email]",
   "python-multipart",
   # Auth & security
   "python-jose[cryptography]",
   "bcrypt",
-  # Database
-  "sqlalchemy",
-  "asyncpg",
-  # Cache
-  "redis",
   # MLflow & Dagshub (for remote model loading via DagsHub)
   "mlflow>=3.0",
   "dagshub",

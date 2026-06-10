@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.api import routes_root,routes_auth,routes_predict
+from backend.api import routes_root,routes_auth,routes_predict,routes_health
 from slowapi.errors import RateLimitExceeded
 from slowapi import _rate_limit_exceeded_handler
 from backend.core.rate_limiter import limiter
@@ -17,3 +17,4 @@ app.add_exception_handler(
 app.include_router(routes_root.router)
 app.include_router(routes_auth.router)
 app.include_router(routes_predict.router)
+app.include_router(routes_health.router)

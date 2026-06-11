@@ -7,7 +7,13 @@ from httpx import ASGITransport, AsyncClient
 
 from backend.main import app
 from backend.core.dependencies import get_artifact
+from backend.core.rate_limiter import limiter
 
+@pytest.fixture(autouse=True)
+def disable_rate_limiter():
+    limiter.enabled = False
+    yield
+    limiter.enabled = True
 
 @pytest.fixture
 def fake_model():

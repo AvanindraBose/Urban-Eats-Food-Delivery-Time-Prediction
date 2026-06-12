@@ -15,7 +15,6 @@ model_promotion_logger = CustomLogger(
     log_filename= log_file_path
 )
 
-
 model_promotion_logger.set_log_level(level=logging.INFO)
 
 def get_token() -> str:

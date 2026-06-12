@@ -17,6 +17,7 @@ model_promotion_logger = CustomLogger(
 
 model_promotion_logger.set_log_level(level=logging.INFO)
 
+
 def get_token() -> str:
 
     try:

@@ -1,0 +1,17 @@
+name: UrbanEats-Food-Delivery-ETA
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fast-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

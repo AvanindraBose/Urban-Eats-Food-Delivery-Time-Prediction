@@ -1,4 +1,5 @@
 import pandas as pd
+import traceback
 from fastapi import APIRouter,Depends,Request
 from backend.schema.request_schema import Requestschema
 from fastapi.responses import JSONResponse
@@ -46,6 +47,7 @@ async def prediction(
         result = await predict_time(pred_data)
     except Exception as e:
         prediction_logger.save_logs(f"Error Occured During Prediction due to : {e}",log_level="error")
+        print(traceback.format_exc())
         return JSONResponse(
             status_code=500,
             content={

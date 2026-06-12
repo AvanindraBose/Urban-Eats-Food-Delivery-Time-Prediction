@@ -83,7 +83,7 @@ def main():
 
     client = get_client()
 
-    model_name = "model"
+    model_name = "delivery_time_pred_model_pipe"
 
     stage_model_version = get_latest_staging_model_version(client , model_name)
 

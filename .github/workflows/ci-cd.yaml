@@ -80,7 +80,7 @@ jobs:
             ${{ runner.os }}-uv-
 
       - name: install dependencies
-        run: uv sync --extra test --extra ml --extra pipeline
+        run: uv sync --extra test --extra pipeline
 
       - name: run dvc pipeline
         env:
@@ -128,7 +128,7 @@ jobs:
             ${{ runner.os }}-uv-
 
       - name: install dependencies
-        run: uv sync --extra test --extra ml --extra pipeline
+        run: uv sync --extra test --extra pipeline
 
       - name: run model tests
         env:

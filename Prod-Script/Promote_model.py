@@ -17,8 +17,6 @@ model_promotion_logger = CustomLogger(
 
 model_promotion_logger.set_log_level(level=logging.INFO)
 
-model_promotion_logger.save_logs(f"Model Promotion Script Triggered at {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')}", log_level='info')
-
 def get_token() -> str:
 
     try:
@@ -80,6 +78,8 @@ def promote_staging_model(client,stage_model_version,model_name) :
                                          log_level='info')
 
 def main(): 
+
+    model_promotion_logger.save_logs(f"Model Promotion Script Triggered at {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')}", log_level='info')
 
     client = get_client()
 

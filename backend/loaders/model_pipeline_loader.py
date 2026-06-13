@@ -37,9 +37,9 @@ async def load_artifacts() -> tuple:
         return (_model_pipe)
     
     try:
-        stage_model = client.get_latest_versions("delivery_time_pred_model_pipe", stages=["Staging"])[0]
+        prod_model = client.get_latest_versions("delivery_time_pred_model_pipe", stages=["Production"])[0]
         model_name = "delivery_time_pred_model_pipe"
-        model_uri = f"models:/{model_name}/{stage_model.version}"
+        model_uri = f"models:/{model_name}/{prod_model.version}"
 
         _model_pipe = await run_in_threadpool(
             mlflow.pyfunc.load_model,

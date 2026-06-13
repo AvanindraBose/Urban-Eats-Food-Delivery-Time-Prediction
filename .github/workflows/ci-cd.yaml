@@ -336,37 +336,92 @@ jobs:
           name: post-promotion-api-logs
           path: logs/
     
+  # dockerizing-api:
+  #   needs:
+  #     - changes
+  #     - post-promotion-api-checks
+  #   if: always() && 
+  #       (github.event_name == 'push') &&
+  #       (github.ref == 'refs/heads/main') && 
+  #       (
+  #         needs.post-promotion-api-checks.result == 'success' || 
+  #         needs.changes.outputs.container == 'true'
+  #       )
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: login to docker
+  #       if: success()
+  #       uses: docker/login-action@v3
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      
+  #     - name: Build Docker Image
+  #       if: success()
+  #       run: |
+  #         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:${{ github.sha }} \
+  #                      -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:latest .
+      
+  #     - name: Push Docker Image to DockerHub
+  #       if: success()
+  #       run: |
+  #         docker push ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:${{ github.sha }}
+  #         docker push ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:latest
+
   dockerizing-api:
-    needs:
+    needs: 
       - changes
+      - docker-build-check
       - post-promotion-api-checks
-    if: always() && 
-        (github.event_name == 'push') &&
-        (github.ref == 'refs/heads/main') && 
-        (
-          needs.post-promotion-api-checks.result == 'success' || 
-          needs.changes.outputs.container == 'true'
-        )
+
+    if: >-
+      always() &&
+      (github.event_name == 'push') &&
+      (github.ref == 'refs/heads/main') &&
+      (
+        needs.post-promotion-api-checks.result == 'success' ||
+          (
+            needs.changes.outputs.container == 'true' &&
+            needs.docker-build-check.result == 'success'
+          )
+      )
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      CONTAINER_NAME: urban-eats-api
+    
     steps:
       - name: checkout code
         uses: actions/checkout@v4
-
-      - name: login to docker
-        if: success()
-        uses: docker/login-action@v3
+      
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
       
-      - name: Build Docker Image
+      - name: login to aws ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: build docker image
         if: success()
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:${{ github.sha }} \
-                       -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:latest .
+          IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}"
+          docker build \
+            -t "${IMAGE_URI}:${{ github.sha }}" \
+            -t "${IMAGE_URI}:latest" .
       
-      - name: Push Docker Image to DockerHub
-        if: success()
+      - name: push docker image to AWS ECR
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:latest
+          IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}"
+          docker push "${IMAGE_URI}:${GITHUB_SHA}"
+          docker push "${IMAGE_URI}:latest"
+
+
+      

@@ -409,11 +409,8 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       
       - name: login to aws ecr
-        run: aws ecr get-login-password \
-            --region "${AWS_REGION}" \
-          | docker login \
-            --username AWS \
-            --password-stdin "${ECR_REGISTRY}"
+        run: |
+          aws ecr get-login-password --region "${AWS_REGION}" | docker login --username AWS --password-stdin "${ECR_REGISTRY}"
       
       - name: Debug values
         run: |

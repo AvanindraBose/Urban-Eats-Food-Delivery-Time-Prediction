@@ -363,7 +363,7 @@ jobs:
         if: success()
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:${{ github.sha }} \
-                       -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta-api:latest .
+                       -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:latest .
       
       - name: Push Docker Image to DockerHub
         if: success()

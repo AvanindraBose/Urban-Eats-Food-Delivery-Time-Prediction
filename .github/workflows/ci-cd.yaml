@@ -362,11 +362,11 @@ jobs:
       - name: Build Docker Image
         if: success()
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/twitter-sentiment-analysis-api:${{ github.sha }} \
-                       -t ${{ secrets.DOCKERHUB_USERNAME }}/twitter-sentiment-analysis-api:latest .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:${{ github.sha }} \
+                       -t ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta-api:latest .
       
       - name: Push Docker Image to DockerHub
         if: success()
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/twitter-sentiment-analysis-api:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/twitter-sentiment-analysis-api:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:latest

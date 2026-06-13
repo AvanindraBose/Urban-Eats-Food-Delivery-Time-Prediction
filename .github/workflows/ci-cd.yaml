@@ -426,6 +426,51 @@ jobs:
           IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}"
           docker push "${IMAGE_URI}:${GITHUB_SHA}"
           docker push "${IMAGE_URI}:latest"
+      
+      - name: create deployment env file
+        env:
+          DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
+          API_KEY: ${{ secrets.API_KEY }}
+          JWT_EXPIRY_MINUTES: ${{ secrets.JWT_EXPIRY_MINUTES }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          SERVICE_ID: ${{ secrets.SERVICE_ID }}
+          JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+        run: |
+          required_vars=(
+            DAGSHUB_PAT
+            API_KEY
+            JWT_EXPIRY_MINUTES
+            JWT_SECRET_KEY
+            SERVICE_ID
+            JWT_ALGORITHM
+            MLFLOW_TRACKING_URI
+          )
+
+          for var_name in "${required_vars[@]}"; do
+            if [ -z "${!var_name}" ]; then
+              echo "Missing required GitHub Secret: ${var_name}"
+              exit 1
+            fi
+          done
+
+          {
+            echo "DAGSHUB_PAT=${DAGSHUB_PAT}"
+            echo "MLFLOW_TRACKING_USERNAME=${DAGSHUB_PAT}"
+            echo "MLFLOW_TRACKING_PASSWORD=${DAGSHUB_PAT}"
+            echo "MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}"
+            echo "API_KEY=${API_KEY}"
+            echo "JWT_EXPIRY_MINUTES=${JWT_EXPIRY_MINUTES}"
+            echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}"
+            echo "SERVICE_ID=${SERVICE_ID}"
+            echo "JWT_ALGORITHM=${JWT_ALGORITHM}"
+          } > .env
+
+      - name: upload deployment files to s3
+        env:
+          DEPLOYMENT_S3_BUCKET: ${{ secrets.DEPLOYMENT_S3_BUCKET }}
+        run: |
+          aws s3 cp .env "s3://${DEPLOYMENT_S3_BUCKET}/.env" --sse AES256
 
 
       

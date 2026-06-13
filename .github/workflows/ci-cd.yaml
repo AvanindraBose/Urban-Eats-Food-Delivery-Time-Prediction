@@ -410,13 +410,15 @@ jobs:
       
       - name: login to aws ecr
         uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registries: ${{ secrets.ECR_REGISTRY }}
       
       - name: build docker image
         if: success()
         run: |
           IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}"
           docker build \
-            -t "${IMAGE_URI}:${{ github.sha }}" \
+            -t "${IMAGE_URI}:${GITHUB_SHA}" \
             -t "${IMAGE_URI}:latest" .
       
       - name: push docker image to AWS ECR

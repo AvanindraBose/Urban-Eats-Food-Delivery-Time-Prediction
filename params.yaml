@@ -5,7 +5,7 @@ Data_Preparation:
 Train:
 
   RFRegressor:
-    max_depth: 15
+    max_depth: 14
     max_features: null
     max_samples: 0.8689643457612419
     min_samples_leaf: 1

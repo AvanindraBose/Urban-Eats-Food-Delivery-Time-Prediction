@@ -395,6 +395,7 @@ jobs:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      DEPLOYMENT_S3_BUCKET: ${{ secrets.DEPLOYMENT_S3_BUCKET }}
       CONTAINER_NAME: urban-eats-api
     
     steps:

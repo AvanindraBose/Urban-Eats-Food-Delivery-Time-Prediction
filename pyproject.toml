@@ -29,7 +29,6 @@ dependencies = [
   "joblib",
   # Utilities
   "pyyaml",
-
 ]
 
 # OPTIONAL GROUPS FOR TRAINING / PIPELINES

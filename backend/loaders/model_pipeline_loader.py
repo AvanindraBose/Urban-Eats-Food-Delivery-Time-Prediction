@@ -37,6 +37,19 @@ async def load_artifacts() -> tuple:
         return (_model_pipe)
     
     try:
+        print("URI:", mlflow.get_tracking_uri())
+
+        print(
+            "DAGSHUB_PAT Exists:",
+            bool(os.getenv("DAGSHUB_PAT"))
+        )
+
+        models = client.search_registered_models()
+
+        print(
+            "Registered Models:",
+            [m.name for m in models]
+        )
         prod_model = client.get_latest_versions("delivery_time_pred_model_pipe", stages=["Production"])[0]
         model_name = "delivery_time_pred_model_pipe"
         model_uri = f"models:/{model_name}/{prod_model.version}"

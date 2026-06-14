@@ -4914,7 +4914,7 @@ requires-dist = [
     { name = "ty", marker = "extra == 'test'" },
     { name = "typer" },
     { name = "uvicorn" },
-    { name = "xgboost" },
+    { name = "xgboost", specifier = "==3.2.0" },
 ]
 provides-extras = ["hptuning", "pipeline", "dev", "test"]
 

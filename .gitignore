@@ -92,4 +92,9 @@ data/raw/*
 
 # Mypy cache
 .mypy_cache/
+
+# Pipeline Generated
 /run_information.json
+
+# ECS Task Deployment
+.aws/task-definition.json

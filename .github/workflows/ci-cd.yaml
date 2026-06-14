@@ -397,6 +397,8 @@ jobs:
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       DEPLOYMENT_S3_BUCKET: ${{ secrets.DEPLOYMENT_S3_BUCKET }}
       CONTAINER_NAME: urban-eats-api
+      ECS_CLUSTER: ${{ secrets.ECS_CLUSTER }}
+      ECS_SERVICE: ${{ secrets.ECS_SERVICE }}
     
     steps:
       - name: checkout code
@@ -472,6 +474,34 @@ jobs:
           DEPLOYMENT_S3_BUCKET: ${{ secrets.DEPLOYMENT_S3_BUCKET }}
         run: |
           aws s3 cp .env "s3://${DEPLOYMENT_S3_BUCKET}/.env" --sse AES256
+      
+      - name: render task definition from template
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          DEPLOYMENT_S3_BUCKET: ${{ secrets.DEPLOYMENT_S3_BUCKET }}
+        run: |
+          sed \
+            -e "s|__AWS_ACCOUNT_ID__|${AWS_ACCOUNT_ID}|g" \
+            -e "s|__AWS_REGION__|${AWS_REGION}|g" \
+            -e "s|__DEPLOYMENT_S3_BUCKET__|${DEPLOYMENT_S3_BUCKET}|g" \
+            .aws/task-definition.template.json > .aws/task-definition.json
+
+      - name: fill in new image id in ecs task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${GITHUB_SHA}
+
+      - name: deploy ecs task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
 
 
       

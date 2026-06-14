@@ -371,7 +371,7 @@ jobs:
   #         docker push ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:${{ github.sha }}
   #         docker push ${{ secrets.DOCKERHUB_USERNAME }}/urban-eats-food-delivery-eta:latest
 
-  dockerizing-api:
+  deploying-to-aws-ecs:
     needs: 
       - changes
       - docker-build-check
@@ -485,13 +485,13 @@ jobs:
             -e "s|__AWS_ACCOUNT_ID__|${AWS_ACCOUNT_ID}|g" \
             -e "s|__AWS_REGION__|${AWS_REGION}|g" \
             -e "s|__DEPLOYMENT_S3_BUCKET__|${DEPLOYMENT_S3_BUCKET}|g" \
-            .aws/task-definition.template.json > .aws/task-definition.json
+            .github/.aws/task-definition.template.json > .github/.aws/task-definition.json
 
       - name: fill in new image id in ecs task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: .aws/task-definition.json
+          task-definition: .github/.aws/task-definition.json
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${GITHUB_SHA}
 

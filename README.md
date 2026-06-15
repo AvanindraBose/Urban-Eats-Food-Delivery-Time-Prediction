@@ -1,57 +1,120 @@
 Urban Eats Delivery Time Prediction
-==============================
+=================================
 
-An End to End ML Project for predicting time of delivery for the urban eats application.
+End-to-end ML repository for predicting delivery time for the Urban Eats application.
 
-Project Organization
-------------
+Project organization
+--------------------
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+Top-level files and folders with a one-line description of their purpose:
+
+- `docker-compose.yaml` : Development docker-compose for running services together (API, DB, etc.).
+- `Dockerfile` : Docker image definition for the API/service.
+- `dvc.yaml` : DVC pipeline definition for data versioning and reproducible pipelines.
+- `LICENSE` : Project license.
+- `Makefile` : Convenience commands for common tasks (data, train, test, etc.).
+- `params.yaml` : Hyperparameters and pipeline parameters tracked by DVC.
+- `pyproject.toml` : Project metadata and build configuration.
+- `README.md` : This file — overview and project structure.
+- `requirements.txt` : Pin-ready list of Python dependencies for simple installs.
+- `setup.py` : Installable package wrapper (editable installs for local development).
+- `test_environment.py` : Small script to verify the runtime/test environment.
+- `tox.ini` : Test and lint environments for running `tox`.
+
+- `backend/` : FastAPI application sources and API route definitions powering the service.
+    - `main.py` : Application entrypoint for Uvicorn/ASGI server.
+    - `api/` : Route modules that expose health, auth, prediction and root endpoints.
+
+- `core/` : Application core utilities, configuration, dependency injection and security.
+
+- `loaders/` : Helpers to load model, pipeline artifacts and serialized objects used at runtime.
+
+- `logging_fastapi/` : Logging configuration and helpers for the FastAPI app.
+
+- `schema/` : Pydantic request/response schemas and validation models for the API.
+
+- `services/` : Business logic layer (e.g., `model_service.py`) that the API calls to perform work.
+
+- `data/` : Data lake with staged data:
+    - `raw/` : Original immutable dataset(s).
+    - `interim/` : Intermediate transforms and split datasets.
+    - `processed/` : Final transformed datasets used for training/evaluation.
+
+- `docs/` : Sphinx documentation and developer docs.
+
+- `logs/` : CI/test and runtime logs grouped by component (Auth, Prediction, Training, etc.).
+
+- `models/` : Serialized trained models and preprocessing artifacts (`.joblib`, transformers).
+
+- `notebooks/` : Exploratory and experiment notebooks, plus HP tuning artifacts.
+
+- `Prod-Script/` : Production utility scripts, e.g., `promote_model.py` to promote artifacts.
+
+- `references/` : Data dictionaries, external references and manuals.
+
+- `reports/` : Generated evaluation reports and figures.
+
+- `scripts/` : Utility scripts for data cleaning, preprocessing and ad-hoc tasks.
+
+- `src/` : Library code used for model building, training, registration and CI tasks.
+
+- `tests/` : Unit and integration tests for API and ML components (`tests/api`, `tests/model`).
+
+- `urbaneats_delivery_time_prediction.egg-info/` : Package metadata generated by packaging tools.
 
 
---------
+Quick notes
+-----------
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+- Keep `models/` and `data/processed/` out of source control if they're large; prefer DVC for data and artifacts.
+- CI workflows live under `.github/workflows/` and run linting, tests, DVC pulls and image builds.
+
+If you'd like, I can:
+
+- convert this into a nicely formatted tree view,
+- add links to key files (API routes, model loader, training script), or
+- generate a minimal CONTRIBUTING guide for local development.
+
+Repository tree (top-level)
+--------------------------
+
+```
+├── .github/               <- CI workflows and GitHub config
+├── backend/               <- FastAPI application and API routes
+├── core/                  <- App configuration, dependencies and security
+├── data/                  <- raw, interim and processed datasets
+├── docs/                  <- Sphinx documentation
+├── loaders/               <- Model and artifact loading helpers
+├── logging_fastapi/       <- Logging helpers and configuration for FastAPI
+├── models/                <- Serialized model artifacts (.joblib, transformers)
+├── notebooks/             <- Experiment and EDA notebooks
+├── notebooks/artifacts/   <- Notebook artifacts and tuning outputs
+├── Prod-Script/           <- Production scripts (e.g., model promotion)
+├── reports/               <- Generated evaluation reports and figures
+├── scripts/               <- Utility scripts for preprocessing and data cleaning
+├── services/              <- Business logic and model service layer
+├── src/                   <- Reusable library code for training/registration
+├── tests/                 <- Unit and integration tests
+├── requirements.txt       <- Python dependencies
+├── Dockerfile             <- Docker image for the API/service
+├── docker-compose.yaml    <- Compose file for local dev
+└── README.md
+```
+
+Key files
+---------
+
+- API entrypoint: [backend/main.py](backend/main.py)
+- Prediction route: [backend/api/routes_predict.py](backend/api/routes_predict.py)
+- Model loader: [loaders/model_pipeline_loader.py](loaders/model_pipeline_loader.py)
+- Service layer: [services/model_service.py](services/model_service.py)
+- Training script: [src/models/train_model.py](src/models/train_model.py)
+- Model promotion script: [Prod-Script/promote_model.py](Prod-Script/promote_model.py)
+- CI workflow: [.github/workflows/ci-cd.yaml](.github/workflows/ci-cd.yaml)
+- Pydantic schemas: [schema/request_schema.py](schema/request_schema.py)
+
+CONTRIBUTING
+-----------
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for a minimal guide to setting up the project locally, running the API, and executing tests.
+

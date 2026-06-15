@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant Dev as Developer
+    participant DVC as DVC
+    participant Trainer as Trainer (train_model.py)
+    participant MLflow as MLflow/DagsHub
+    participant Artifact as Artifact Store (S3/DVC remote)
+
+    Dev->>DVC: prepare & push raw data / params
+    DVC->>Trainer: provide processed data
+    Trainer->>Trainer: preprocess, fit, evaluate
+    Trainer->>Artifact: save model artifacts (models/, preprocessor)
+    Trainer->>MLflow: log metrics & register model
+    MLflow->>Artifact: reference artifacts

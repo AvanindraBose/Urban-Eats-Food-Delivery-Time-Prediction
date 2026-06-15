@@ -27,8 +27,8 @@ flowchart LR
 
   subgraph Training[Training & Evaluation]
     Trainer[src/models/train_model.py]
-    Preprocessor[models/preprocessor.joblib]
-    ModelFiles[models/* (.joblib)]
+    Preprocessor["models/preprocessor.joblib"]
+    ModelFiles["models/*.joblib"]
     Evaluator[src/models/evaluate_model.py]
     Trainer -->|save artifacts| ModelFiles
     Trainer -->|save transformer| Preprocessor
@@ -45,7 +45,7 @@ flowchart LR
 
   subgraph Serving[API / Runtime]
     Backend[FastAPI - backend/main.py]
-    Routes[backend/api/*]
+    Routes["backend/api/*"]
     Loaders[backend/loaders/model_pipeline_loader.py]
     Services[backend/services/model_service.py]
     Backend --> Routes
@@ -86,7 +86,6 @@ flowchart LR
 
   %% notes
   classDef infra fill:#f9f,stroke:#333,stroke-width:1px;
-  class Infra infra;
 ```
 
 Legend / notes

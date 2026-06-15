@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant Client as Client / Frontend
+    participant API as FastAPI (backend/main.py)
+    participant Routes as Routes (backend/api/*)
+    participant Services as Services (model_service.py)
+    participant Loader as Loader (model_pipeline_loader.py)
+    participant MLflow as MLflow/DagsHub
+
+    Client->>API: POST /predict (json, auth)
+    API->>Routes: validate & parse request
+    Routes->>Services: pass data
+    Services->>Loader: load model (if not cached)
+    Loader->>MLflow: fetch registered model
+    Loader-->>Services: return model
+    Services->>Services: preprocess input, predict
+    Services-->>API: return prediction
+    API-->>Client: JSON response (time, bounds)

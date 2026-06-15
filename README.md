@@ -109,6 +109,11 @@ Key files
 - CI workflow: [.github/workflows/ci-cd.yaml](.github/workflows/ci-cd.yaml)
 - Pydantic schemas: [schema/request_schema.py](schema/request_schema.py)
 
+Architecture
+------------
+
+Detailed architecture diagram: [ARCHITECTURE.md](ARCHITECTURE.md)
+
 CONTRIBUTING
 -----------
 

@@ -1,6 +1,8 @@
 Urban Eats Delivery Time Prediction
 =================================
 
+![CI](https://github.com/AvanindraBose/Urban-Eats-Food-Delivery-Time-Prediction/actions/workflows/ci-cd.yaml/badge.svg) ![License](https://img.shields.io/badge/license-MIT-green)
+
 End-to-end ML repository for predicting delivery time for the Urban Eats application.
 
 Project organization
@@ -69,12 +71,6 @@ Quick notes
 - Keep `models/` and `data/processed/` out of source control if they're large; prefer DVC for data and artifacts.
 - CI workflows live under `.github/workflows/` and run linting, tests, DVC pulls and image builds.
 
-If you'd like, I can:
-
-- convert this into a nicely formatted tree view,
-- add links to key files (API routes, model loader, training script), or
-- generate a minimal CONTRIBUTING guide for local development.
-
 Repository tree (top-level)
 --------------------------
 
@@ -117,4 +113,100 @@ CONTRIBUTING
 -----------
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for a minimal guide to setting up the project locally, running the API, and executing tests.
+
+Quickstart
+----------
+
+Get a working environment and run the API locally:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate    # bash/macOS
+# on Windows PowerShell use: .\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# (optional) if you use `uv` in this repo
+pip install uv
+uv sync --extra test --extra pipeline
+
+# start the API
+uvicorn backend.main:app --reload
+```
+
+Usage
+-----
+
+Prediction endpoint (requires authentication):
+
+- URL: `POST /predict`
+- Content-Type: `application/json`
+- Auth: Bearer token in `Authorization` header (see `CONTRIBUTING.md` and CI secrets for where tokens come from)
+
+Example curl request:
+
+```bash
+curl -X POST "http://127.0.0.1:8000/predict" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer <YOUR_TOKEN>" \
+    -d '{
+        "ID": "1",
+        "Delivery_person_ID": "DP_1",
+        "Delivery_person_Age": "30",
+        "Delivery_person_Ratings": "4.5",
+        "Restaurant_latitude": 12.9716,
+        "Restaurant_longitude": 77.5946,
+        "Delivery_location_latitude": 12.9352,
+        "Delivery_location_longitude": 77.6245,
+        "Order_Date": "2023-01-01",
+        "Time_Orderd": "12:00",
+        "Time_Order_picked": "12:10",
+        "Weatherconditions": "Sunny",
+        "Road_traffic_density": "Moderate",
+        "Vehicle_condition": 5,
+        "Type_of_order": "Snack",
+        "Type_of_vehicle": "Bike",
+        "multiple_deliveries": "1",
+        "Festival": "No",
+        "City": "CityName"
+    }'
+```
+
+Model summary
+-------------
+
+- Model type: `TransformedTargetRegressor` wrapping a `StackingRegressor` (RandomForest + XGBoost) with a `LinearRegression` meta-estimator.
+- Target transformer: `PowerTransformer` applied to the target variable.
+- Artifacts: saved under `models/` (e.g., `model.joblib`, `stacking_regressor.joblib`, `power_transformer.joblib`, `preprocessor.joblib`).
+- Metrics: training and validation metrics (MAE, R2, CV scores) are logged during evaluation to MLflow and a run manifest is saved at `reports/run_information.json`.
+
+Reproducibility
+---------------
+
+Data and artifacts are versioned with DVC. To reproduce the training pipeline or fetch required data/artifacts:
+
+```bash
+# pull tracked data/artifacts (configure DVC remote credentials first)
+uv run dvc pull
+
+# run the pipeline (reproducible steps defined in dvc.yaml)
+uv run dvc repro
+```
+
+Required environment variables for ML and CI interactions (examples):
+
+- `DAGSHUB_PAT` — token for DagsHub/MLflow access
+- `MLFLOW_TRACKING_URI` — MLflow tracking server URI
+- `AWS_DVC_ACCESS_KEY_ID`, `AWS_DVC_SECRET_ACCESS_KEY` — for DVC S3 remotes
+- `AWS_DOCKER_ACCESS_KEY_ID`, `AWS_DOCKER_SECRET_ACCESS_KEY`, `ECR_REGISTRY`, `ECR_REPOSITORY` — for ECR pushes
+- `API_KEY`, `JWT_SECRET_KEY`, `JWT_ALGORITHM`, `JWT_EXPIRY_MINUTES` — for running API tests locally/CI
+
+Badges & CI status
+------------------
+
+- CI pipeline status: [![CI](https://github.com/AvanindraBose/Urban-Eats-Food-Delivery-Time-Prediction/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/AvanindraBose/Urban-Eats-Food-Delivery-Time-Prediction/actions)
+- License: [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+---
+
+If you want, I can add example Postman collections, attach model metric snapshots to this README, or generate a small architecture diagram.
 

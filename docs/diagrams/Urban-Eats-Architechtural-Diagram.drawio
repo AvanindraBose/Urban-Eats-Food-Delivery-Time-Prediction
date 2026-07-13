@@ -1,4 +1,5 @@
 <mxfile host="app.diagrams.net" pages="3">
+<mxfile host="app.diagrams.net" pages="3">
   <diagram name="Model Training Architecture" id="h313EsKIleflXHNQWE7h">
     <mxGraphModel dx="4275" dy="1520" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="light-dark(#000000,#111112)" math="0" shadow="0">
       <root>
@@ -110,6 +111,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="aTkJtLsTKkCGgqeErs7y" name="Request Flow Architechture Diagram">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
     <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />

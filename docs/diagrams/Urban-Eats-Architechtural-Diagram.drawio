@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" pages="2">
+<mxfile host="app.diagrams.net" pages="3">
   <diagram name="Model Training Architecture" id="h313EsKIleflXHNQWE7h">
     <mxGraphModel dx="4275" dy="1520" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="light-dark(#000000,#111112)" math="0" shadow="0">
       <root>
@@ -110,7 +110,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="aTkJtLsTKkCGgqeErs7y" name="Request Flow Architechture Diagram">
-    <mxGraphModel dx="3670" dy="1351" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -292,6 +292,137 @@
             <mxPoint x="84.99999999999994" y="510.9760000000001" as="sourcePoint" />
             <mxPoint x="-590.0039999999999" y="310" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uuiW2NZvw6awF0Xrt_LG" name="Model Inference Architechture">
+     <mxGraphModel dx="3139" dy="1351" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1000" background="light-dark(#FFFFFF,#0B0F14)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="inf-title" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=light-dark(#0F172A,#F8FAFC);fontSize=26;fontStyle=1;" value="UrbanEats Model Inference Architecture" vertex="1">
+          <mxGeometry height="44" width="760" x="470" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-subtitle" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=light-dark(#475569,#94A3B8);fontSize=13;fontStyle=0;" value="Service-to-service API, JWT auth, ECS Fargate runtime, MLflow production model loading" vertex="1">
+          <mxGeometry height="28" width="820" x="440" y="76" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inf-deploy-boundary" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeColor=light-dark(#94A3B8,#475569);gradientColor=light-dark(#F8FAFC,#111827);fillColor=default;strokeWidth=1.2;verticalAlign=top;fontColor=light-dark(#334155,#E5E7EB);fontSize=12;" value="" vertex="1">
+          <mxGeometry height="135" width="1160" x="270" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-deploy-label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=light-dark(#0F172A,#E5E7EB);fontSize=12;fontStyle=1;" value="Deployment Supply Chain" vertex="1">
+          <mxGeometry height="24" width="260" x="295" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-github" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#A1A1AA);gradientColor=light-dark(#FFFFFF,#27272A);fontColor=light-dark(#111827,#F4F4F5);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="GitHub Actions&lt;br&gt;CI/CD Pipeline" vertex="1">
+          <mxGeometry height="62" width="190" x="330" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-ecr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#FBBF24);gradientColor=light-dark(#FFFFFF,#3B2F0B);fontColor=light-dark(#111827,#FEF3C7);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Amazon ECR&lt;br&gt;urban-eats-api image" vertex="1">
+          <mxGeometry height="62" width="210" x="610" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-taskdef" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#38BDF8);gradientColor=light-dark(#FFFFFF,#1E293B);fontColor=light-dark(#111827,#E0F2FE);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="ECS Task Definition&lt;br&gt;FARGATE, 1024 CPU, 3072 MB" vertex="1">
+          <mxGeometry height="62" width="240" x="910" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-ecs-service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#38BDF8);gradientColor=light-dark(#FFFFFF,#1E293B);fontColor=light-dark(#111827,#E0F2FE);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Amazon ECS Service&lt;br&gt;Fargate launch type" vertex="1">
+          <mxGeometry height="62" width="210" x="1220" y="185" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inf-runtime-boundary" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeColor=light-dark(#94A3B8,#475569);gradientColor=light-dark(#F8FAFC,#111827);fillColor=default;strokeWidth=1.2;verticalAlign=top;fontColor=light-dark(#334155,#E5E7EB);fontSize=12;" value="" vertex="1">
+          <mxGeometry height="390" width="1150" x="330" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-runtime-label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=light-dark(#0F172A,#E5E7EB);fontSize=12;fontStyle=1;" value="AWS ECS Fargate Task: urban-eats-api container on port 8000" vertex="1">
+          <mxGeometry height="24" width="520" x="355" y="362" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-client" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#A1A1AA);gradientColor=light-dark(#FFFFFF,#27272A);fontColor=light-dark(#111827,#F4F4F5);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="External Backend&lt;br&gt;Service Consumer" vertex="1">
+          <mxGeometry height="70" width="210" x="40" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-fastapi" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#38BDF8);gradientColor=light-dark(#FFFFFF,#1E293B);fontColor=light-dark(#111827,#E0F2FE);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Uvicorn + FastAPI&lt;br&gt;backend/main.py" vertex="1">
+          <mxGeometry height="70" width="210" x="375" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-routes" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#38BDF8);gradientColor=light-dark(#FFFFFF,#1E293B);fontColor=light-dark(#111827,#E0F2FE);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="API Routes&lt;br&gt;/auth/token, /predict&lt;br&gt;/internal/health, /" vertex="1">
+          <mxGeometry height="84" width="230" x="650" y="478" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-rate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#F87171);gradientColor=light-dark(#FFFFFF,#3B1D1D);fontColor=light-dark(#111827,#FEE2E2);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="SlowAPI Rate Limiter&lt;br&gt;5/min token, 8/min predict" vertex="1">
+          <mxGeometry height="70" width="220" x="650" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#F87171);gradientColor=light-dark(#FFFFFF,#3B1D1D);fontColor=light-dark(#111827,#FEE2E2);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Auth/Security&lt;br&gt;X-API-Key to JWT&lt;br&gt;verify_token()" vertex="1">
+          <mxGeometry height="84" width="230" x="930" y="365" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#A78BFA);gradientColor=light-dark(#FFFFFF,#312E81);fontColor=light-dark(#111827,#F5F3FF);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Model Service&lt;br&gt;predict_time()" vertex="1">
+          <mxGeometry height="70" width="210" x="930" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-clean" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#38BDF8);gradientColor=light-dark(#FFFFFF,#1E293B);fontColor=light-dark(#111827,#E0F2FE);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Input Cleaning&lt;br&gt;perform_data_cleaning()" vertex="1">
+          <mxGeometry height="70" width="210" x="1215" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-loader" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#A78BFA);gradientColor=light-dark(#FFFFFF,#312E81);fontColor=light-dark(#111827,#F5F3FF);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Model Loader&lt;br&gt;load_artifacts()&lt;br&gt;cached in process" vertex="1">
+          <mxGeometry height="84" width="210" x="1215" y="610" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inf-s3-env" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#2DD4BF);gradientColor=light-dark(#FFFFFF,#123524);fontColor=light-dark(#111827,#E6FFFA);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="S3 Deployment Env File&lt;br&gt;.env loaded by task&lt;br&gt;API_KEY, JWT, DAGSHUB_PAT" vertex="1">
+          <mxGeometry height="84" width="250" x="40" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-mlflow" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#FBBF24);gradientColor=light-dark(#FFFFFF,#3B2F0B);fontColor=light-dark(#111827,#FEF3C7);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="MLflow / DagsHub&lt;br&gt;Production Model&lt;br&gt;delivery_time_pred_model_pipe" vertex="1">
+          <mxGeometry height="90" width="270" x="1515" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-cloudwatch" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#A1A1AA);gradientColor=light-dark(#FFFFFF,#27272A);fontColor=light-dark(#111827,#F4F4F5);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Amazon CloudWatch Logs&lt;br&gt;/ecs/urban-eats-containers" vertex="1">
+          <mxGeometry height="70" width="250" x="1515" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="inf-health" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=light-dark(#000000,#2DD4BF);gradientColor=light-dark(#FFFFFF,#123524);fontColor=light-dark(#111827,#E6FFFA);fontSize=11;strokeWidth=1.6;perimeterSpacing=1;" value="Container Health Check&lt;br&gt;GET /internal/health&lt;br&gt;loads model dependency" vertex="1">
+          <mxGeometry height="84" width="250" x="1515" y="710" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inf-routes-detail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeColor=light-dark(#94A3B8,#475569);gradientColor=light-dark(#F8FAFC,#111827);fillColor=default;fontColor=light-dark(#334155,#CBD5E1);fontSize=11;align=left;verticalAlign=top;spacing=12;strokeWidth=1.2;" value="&lt;b&gt;API Route Contract&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;POST /auth/token&lt;/b&gt; - requires X-API-Key, returns bearer service token&lt;br&gt;&lt;b&gt;POST /predict&lt;/b&gt; - requires Authorization: Bearer token and prediction payload&lt;br&gt;&lt;b&gt;GET /internal/health&lt;/b&gt; - ECS health check, verifies model can load&lt;br&gt;&lt;b&gt;GET /&lt;/b&gt; - root welcome route" vertex="1">
+          <mxGeometry height="155" width="760" x="470" y="795" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inf-legend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeColor=light-dark(#94A3B8,#475569);gradientColor=light-dark(#F8FAFC,#111827);fillColor=default;fontColor=light-dark(#334155,#CBD5E1);fontSize=10;align=left;verticalAlign=top;spacing=10;strokeWidth=1.2;" value="&lt;b&gt;Color Encoding&lt;/b&gt;&lt;br&gt;Blue: API/runtime&lt;br&gt;Red: auth/security/rate limit&lt;br&gt;Purple: model compute&lt;br&gt;Gold: registry/image registry&lt;br&gt;Green: configuration/I/O&lt;br&gt;Gray: external AWS/supporting services" vertex="1">
+          <mxGeometry height="155" width="250" x="1235" y="795" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-github-ecr" edge="1" parent="1" source="inf-github" target="inf-ecr" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="build + push image">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ecr-taskdef" edge="1" parent="1" source="inf-ecr" target="inf-taskdef" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="image URI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-taskdef-ecs" edge="1" parent="1" source="inf-taskdef" target="inf-ecs-service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="deploy task definition">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ecs-runtime" edge="1" parent="1" source="inf-ecs-service" target="inf-runtime-boundary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#94A3B8,#64748B);strokeWidth=1.4;fontColor=light-dark(#334155,#CBD5E1);fontSize=10;labelBackgroundColor=none;dashed=1;dashPattern=4 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.82;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" value="runs task">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-client-fastapi" edge="1" parent="1" source="inf-client" target="inf-fastapi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="HTTP API call">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fastapi-routes" edge="1" parent="1" source="inf-fastapi" target="inf-routes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="route dispatch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-routes-rate" edge="1" parent="1" source="inf-routes" target="inf-rate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="rate limit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-routes-auth" edge="1" parent="1" source="inf-routes" target="inf-auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="/auth/token or bearer check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-auth-service" edge="1" parent="1" source="inf-auth" target="inf-service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="valid token">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-service-clean" edge="1" parent="1" source="inf-service" target="inf-clean" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="clean payload">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-clean-loader" edge="1" parent="1" source="inf-clean" target="inf-loader" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#475569,#CBD5E1);strokeWidth=1.6;fontColor=light-dark(#334155,#E2E8F0);fontSize=10;labelBackgroundColor=none;" value="predict with model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-loader-mlflow" edge="1" parent="1" source="inf-loader" target="inf-mlflow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#94A3B8,#64748B);strokeWidth=1.4;fontColor=light-dark(#334155,#CBD5E1);fontSize=10;labelBackgroundColor=none;dashed=1;dashPattern=4 4;" value="load Production model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-s3-runtime" edge="1" parent="1" source="inf-s3-env" target="inf-runtime-boundary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#94A3B8,#64748B);strokeWidth=1.4;fontColor=light-dark(#334155,#CBD5E1);fontSize=10;labelBackgroundColor=none;dashed=1;dashPattern=4 4;entryX=0;entryY=0.78;entryDx=0;entryDy=0;entryPerimeter=0;" value="environmentFiles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-runtime-cloudwatch" edge="1" parent="1" source="inf-runtime-boundary" target="inf-cloudwatch" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#94A3B8,#64748B);strokeWidth=1.4;fontColor=light-dark(#334155,#CBD5E1);fontSize=10;labelBackgroundColor=none;dashed=1;dashPattern=4 4;exitX=1;exitY=0.22;exitDx=0;exitDy=0;exitPerimeter=0;" value="awslogs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-health-runtime" edge="1" parent="1" source="inf-health" target="inf-routes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;flowAnimation=1;strokeColor=light-dark(#94A3B8,#64748B);strokeWidth=1.4;fontColor=light-dark(#334155,#CBD5E1);fontSize=10;labelBackgroundColor=none;dashed=1;dashPattern=4 4;" value="health probe">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

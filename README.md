@@ -102,17 +102,110 @@ Key files
 
 - API entrypoint: [backend/main.py](backend/main.py)
 - Prediction route: [backend/api/routes_predict.py](backend/api/routes_predict.py)
-- Model loader: [loaders/model_pipeline_loader.py](loaders/model_pipeline_loader.py)
-- Service layer: [services/model_service.py](services/model_service.py)
+- Model loader: [backend/loaders/model_pipeline_loader.py](backend/loaders/model_pipeline_loader.py)
+- Service layer: [backend/services/model_service.py](backend/services/model_service.py)
 - Training script: [src/models/train_model.py](src/models/train_model.py)
 - Model promotion script: [Prod-Script/promote_model.py](Prod-Script/promote_model.py)
 - CI workflow: [.github/workflows/ci-cd.yaml](.github/workflows/ci-cd.yaml)
-- Pydantic schemas: [schema/request_schema.py](schema/request_schema.py)
+- Pydantic schemas: [backend/schema/request_schema.py](backend/schema/request_schema.py)
 
 Architecture
 ------------
 
-Detailed architecture diagram: [ARCHITECTURE.md](ARCHITECTURE.md)
+Detailed architecture notes: [ARCHITECTURE.md](ARCHITECTURE.md)
+
+The project also includes draw.io architecture files under [docs/diagrams](docs/diagrams). These are the recommended
+reference diagrams for interviews because they split the system into focused views instead of showing the entire
+project in one crowded diagram.
+
+Draw.io source files:
+
+- [Urban-Eats-Architechtural-Diagram.drawio](docs/diagrams/Urban-Eats-Architechtural-Diagram.drawio) : editable draw.io source.
+- [Urban-Eats-Architechtural-Diagram.drawio.xml](docs/diagrams/Urban-Eats-Architechtural-Diagram.drawio.xml) : XML copy of the same draw.io file.
+
+Exported diagram images:
+
+- [Model Training Architecture](docs/diagrams/Urban-Eats-Architechtural-Diagram-Model%20Training%20Architecture.drawio.png)
+- [Request Flow Architechture Diagram](docs/diagrams/Urban-Eats-Architechtural-Diagram-Request%20Flow%20Architechture%20Diagram.drawio.png)
+- [Model Inference Architechture](docs/diagrams/Urban-Eats-Architechtural-Diagram-Model%20Inference%20Architechture.drawio.png)
+
+### Model Training Architecture
+
+This diagram explains how raw delivery data becomes a registered production model.
+
+- **DVC remote storage / Amazon S3** : stores versioned raw data and pipeline artifacts outside Git. This keeps the repository lightweight while still making data and model outputs reproducible.
+- **DVC pipeline orchestration** : `dvc.yaml` defines the ordered ML stages. In an interview, describe this as the reproducibility layer: each stage has explicit dependencies, outputs, and parameters.
+- **Raw dataset** : the original Urban Eats delivery dataset. This is treated as immutable input data.
+- **Data cleaning** : implemented in [src/data/data_cleaning.py](src/data/data_cleaning.py). It removes or normalizes invalid records before the data is used for modelling.
+- **Data preparation** : implemented in [src/data/data_preparation.py](src/data/data_preparation.py). It creates train/test splits and prepares intermediate datasets.
+- **Feature engineering / preprocessing** : implemented in [src/features/feature_preprocessing.py](src/features/feature_preprocessing.py). It transforms raw columns into model-ready features and saves the preprocessing artifact.
+- **Model training** : implemented in [src/models/train_model.py](src/models/train_model.py). The final model is a `TransformedTargetRegressor` wrapping a stacking regressor with Random Forest, XGBoost, and Linear Regression.
+- **Model evaluation** : implemented in [src/models/evaluate_model.py](src/models/evaluate_model.py). It evaluates the trained model and writes run information to [reports/run_information.json](reports/run_information.json).
+- **Model registry** : implemented through [src/models/register_model.py](src/models/register_model.py). This registers the selected model so serving code can load a stable production version.
+- **MLflow / DagsHub** : tracks experiments, metrics, model versions, and the production model stage.
+
+Interview explanation:
+
+> "The training architecture is DVC-driven. Raw data flows through cleaning, preparation, feature preprocessing,
+> training, evaluation, and registration. DVC gives reproducibility, while MLflow/DagsHub gives experiment tracking
+> and model registry support. The serving layer does not depend on local notebook state; it loads the production model
+> from the registry."
+
+### Request Flow Architechture Diagram
+
+This diagram explains the service-to-service API lifecycle.
+
+- **External backend service** : the API consumer. This project is not designed for direct end-user access; another backend service calls it.
+- **`POST /auth/token`** : exchanges a trusted `X-API-Key` header for a short-lived bearer token.
+- **API key validation** : implemented in [backend/api/routes_auth.py](backend/api/routes_auth.py). If the API key is missing or invalid, the API returns `401` or `403`.
+- **JWT generation** : implemented in [backend/core/security.py](backend/core/security.py). The token includes service identity, token type, issue time, and expiry.
+- **`POST /predict`** : accepts the prediction payload and requires `Authorization: Bearer <token>`.
+- **Token verification** : implemented through [backend/core/dependencies.py](backend/core/dependencies.py). Expired, invalid, or wrong-token-type requests are rejected before prediction.
+- **Rate limiting** : implemented through [backend/core/rate_limiter.py](backend/core/rate_limiter.py). Token generation is limited to `5/minute`; prediction is limited to `8/minute`.
+- **Request schema validation** : implemented in [backend/schema/request_schema.py](backend/schema/request_schema.py). FastAPI validates the payload before it reaches model logic.
+- **Prediction response** : returns predicted ETA plus lower and upper bounds.
+
+Interview explanation:
+
+> "The API uses a two-step service authentication flow. A trusted backend first exchanges an API key for a JWT service
+> token, then uses that bearer token for prediction requests. This keeps prediction protected while avoiding direct
+> user-facing authentication complexity."
+
+### Model Inference Architechture
+
+This diagram explains how the backend service runs in production on AWS ECS Fargate.
+
+- **GitHub Actions CI/CD** : defined in [.github/workflows/ci-cd.yaml](.github/workflows/ci-cd.yaml). It runs checks, builds the Docker image, pushes it to ECR, renders the ECS task definition, and deploys the ECS service.
+- **Docker image** : defined in [Dockerfile](Dockerfile). The runtime image starts Uvicorn with `backend.main:app` on port `8000`.
+- **Amazon ECR** : stores the versioned `urban-eats-api` image built by CI.
+- **ECS task definition** : defined in [.github/.aws/task-definition.template.json](.github/.aws/task-definition.template.json). It uses Fargate compatibility, `awsvpc` networking, `1024` CPU units, and `3072` MB memory.
+- **Amazon ECS service on Fargate** : runs the API container without managing EC2 instances directly.
+- **FastAPI application** : [backend/main.py](backend/main.py) wires together root, auth, predict, and health routers.
+- **API routes** : route modules live in [backend/api](backend/api). The key runtime routes are `/auth/token`, `/predict`, `/internal/health`, and `/`.
+- **Model service** : [backend/services/model_service.py](backend/services/model_service.py) performs input cleaning, loads the model, runs prediction in a threadpool, and returns ETA bounds.
+- **Model loader** : [backend/loaders/model_pipeline_loader.py](backend/loaders/model_pipeline_loader.py) loads the MLflow production model `delivery_time_pred_model_pipe` and caches it in process.
+- **MLflow / DagsHub production model** : the runtime source of truth for the promoted model version.
+- **S3 deployment `.env` file** : CI writes deployment secrets such as `DAGSHUB_PAT`, `API_KEY`, `JWT_SECRET_KEY`, and `MLFLOW_TRACKING_URI` to S3 for the ECS task environment file.
+- **CloudWatch logs** : the ECS task sends container logs to `/ecs/urban-eats-containers`.
+- **Container health check** : the task definition calls `GET /internal/health`, which verifies that the API can load the model dependency.
+
+Interview explanation:
+
+> "The inference service is deployed as a containerized FastAPI app on ECS Fargate. CI builds and pushes the image to
+> ECR, renders the task definition, and updates the ECS service. At runtime, the container receives configuration from
+> an S3 environment file, logs to CloudWatch, authenticates service callers with API key plus JWT, and loads the
+> production model from MLflow/DagsHub."
+
+### Color Encoding
+
+The draw.io diagrams use a consistent color convention:
+
+- **Blue** : API/runtime and data-processing steps.
+- **Green** : data, storage, configuration, and I/O boundaries.
+- **Purple** : model training, model serving, and compute-heavy ML logic.
+- **Gold** : model registry, tracking, and image registry concepts.
+- **Red** : authentication, authorization, and rate limiting.
+- **Gray** : external systems, supporting infrastructure, and service consumers.
 
 CONTRIBUTING
 -----------

@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" pages="2">
   <diagram name="Model Training Architecture" id="h313EsKIleflXHNQWE7h">
-    <mxGraphModel dx="3353" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="light-dark(#000000,#111112)" math="0" shadow="0">
+    <mxGraphModel dx="4275" dy="1520" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="light-dark(#000000,#111112)" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -110,7 +110,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="aTkJtLsTKkCGgqeErs7y" name="Model Inference Architechture Diagram">
-    <mxGraphModel dx="2264" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2532" dy="802" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -139,7 +139,7 @@
           <mxGeometry height="60" width="250" x="1040" y="250" as="geometry" />
         </mxCell>
         <mxCell id="8Nk0KE2DWW3t8m2mAHke-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;strokeColor=light-dark(#64748B,#0F172A);gradientColor=light-dark(#F8FAFC,#111827);fillColor=default;strokeWidth=1;verticalAlign=top;fontColor=light-dark(#334155,#94A3B8);fontSize=12;" value="" vertex="1">
-          <mxGeometry height="150" width="2660" x="-720" y="430" as="geometry" />
+          <mxGeometry height="150" width="2960" x="-720" y="430" as="geometry" />
         </mxCell>
         <mxCell id="8Nk0KE2DWW3t8m2mAHke-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=light-dark(#0F172A,#E2E8F0);fontSize=12.5;fontStyle=1;" value="Prediction Request  ·  POST /predict" vertex="1">
           <mxGeometry height="24" width="600" x="-430" y="440" as="geometry" />
@@ -165,7 +165,7 @@
         <mxCell id="8Nk0KE2DWW3t8m2mAHke-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;strokeColor=light-dark(#000000,#A78BFA);gradientColor=light-dark(#000000,#312E81);fontColor=light-dark(#000000,#F1F5F9);fontSize=11;fontStyle=0;strokeWidth=1.6;perimeterSpacing=1;" value="Model Loader load_artifacts()" vertex="1">
           <mxGeometry height="60" width="250" x="1350" y="510" as="geometry" />
         </mxCell>
-        <mxCell id="8Nk0KE2DWW3t8m2mAHke-18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;strokeColor=light-dark(#000000,#FBBF24);gradientColor=light-dark(#000000,#3B2F0B);fontColor=light-dark(#000000,#F1F5F9);fontSize=11;fontStyle=0;strokeWidth=1.6;perimeterSpacing=1;" value="MLflow / DagsHub Production Model" vertex="1">
+        <mxCell id="8Nk0KE2DWW3t8m2mAHke-18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;strokeColor=light-dark(#000000,#FBBF24);gradientColor=light-dark(#000000,#3B2F0B);fontColor=light-dark(#000000,#F1F5F9);fontSize=11;fontStyle=0;strokeWidth=1.6;perimeterSpacing=1;" value="In-Memory MLFlow Production Model" vertex="1">
           <mxGeometry height="60" width="250" x="1640" y="510" as="geometry" />
         </mxCell>
         <mxCell id="8Nk0KE2DWW3t8m2mAHke-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;strokeColor=light-dark(#000000,#2DD4BF);gradientColor=light-dark(#000000,#123524);fontColor=light-dark(#000000,#F1F5F9);fontSize=11;fontStyle=0;strokeWidth=1.6;perimeterSpacing=1;" value="ETA Prediction Response" vertex="1">

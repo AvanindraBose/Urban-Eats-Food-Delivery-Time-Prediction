@@ -5,6 +5,8 @@ Urban Eats Delivery Time Prediction
 
 End-to-end ML repository for predicting delivery time for the Urban Eats application.
 
+Demo video: [Urban Eats project walkthrough](https://www.youtube.com/watch?v=3oGLchIH598)
+
 Project organization
 --------------------
 
